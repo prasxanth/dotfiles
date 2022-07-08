@@ -1,0 +1,158 @@
+#+TITLE: Prashanth's Doom Emacs Config
+#+AUTHOR: Prashanth Kumar
+#+DESCRIPTION: Prashanth's personal Doom Emacs config.
+#+STARTUP: fold
+
+* TABLE OF CONTENTS :TOC:
+- [[#important-put-this-in-your-initel][IMPORTANT! PUT THIS IN YOUR INIT.EL]]
+- [[#post-install-actions][POST-INSTALL ACTIONS]]
+  - [[#fonts][Fonts]]
+- [[#startup-performance][STARTUP PERFORMANCE]]
+  - [[#garbage-collection][Garbage collection]]
+  - [[#native-compile][Native Compile]]
+- [[#beacon][BEACON]]
+- [[#delete-selection-mode][DELETE SELECTION MODE]]
+- [[#fonts-1][FONTS]]
+- [[#org-mode][ORG MODE]]
+  - [[#defining-a-few-things][Defining A Few Things]]
+  - [[#enabling-org-bullets][Enabling Org Bullets]]
+  - [[#source-code-block-syntax-highlighting][Source Code Block Syntax Highlighting]]
+- [[#runtime-performance][RUNTIME PERFORMANCE]]
+- [[#startup-window-size][STARTUP WINDOW SIZE]]
+
+* IMPORTANT! PUT THIS IN YOUR INIT.EL 
+The following code block should be your init.el.  This tells init.el to use the source code blocks from this file (config.org).
+
+#+begin_example
+(org-babel-load-file
+ (expand-file-name
+  "config.org"
+  user-emacs-directory))
+#+end_example
+
+Assuming this file (config.org) is in =/.doom.d=, the simpler alternative below will also work,
+
+#+begin_example
+(org-babel-load-file "~/.doom.d/config.org")
+#+end_example
+
+* POST-INSTALL ACTIONS
+
+** Fonts
+*** Defaults
+Install [[https://fonts.google.com/specimen/Fira+Code][Fira Code]] (fixed pitch) and [[https://fonts.google.com/specimen/Fira+Sans][Fira Sans]] (variable pitch) fonts in OS.
+*** all-the-icons
+Fonts for ~all-the-icons~ are not installed by default. Install them using ~M-x all-the-icons-install-fonts~.
+
+* STARTUP PERFORMANCE
+
+This section is where it make emacs faster to load.
+
+** Garbage collection
+Makes startup faster by reducing the frequency of garbage collection
+#+begin_src emacs-lisp
+;; Setting garbage collection threshold
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "*** Emacs loaded in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+;; Silence compiler warnings as they can be pretty disruptive (setq comp-async-report-warnings-errors nil)
+#+end_src
+
+** Native Compile
+#+begin_src emacs-lisp
+;; Silence compiler warnings as they can be pretty disruptive
+(if (boundp 'comp-deferred-compilation)
+    (setq comp-deferred-compilation nil)
+    (setq native-comp-deferred-compilation nil))
+;; In noninteractive sessions, prioritize non-byte-compiled source files to
+;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
+;; to skip the mtime checks on every *.elc file.
+(setq load-prefer-newer noninteractive)
+#+end_src
+
+* BEACON
+
+#+begin_src emacs-lisp
+(beacon-mode 1)
+#+end_src emacs-lisp
+
+* DELETE SELECTION MODE
+
+By default in Emacs, we don't have ability to select text, and then start typing and our new text replaces the selection.  Let's fix that!
+
+#+begin_src emacs-lisp
+(delete-selection-mode t)
+#+end_src
+
+* FONTS
+
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Fira Code" :size 18 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 16))
+
+;; changes certain keywords to symbols, such as lamda!
+(setq global-prettify-symbols-mode t)
+#+end_src
+
+* ORG MODE
+
+Org Mode is =THE= killer feature within Emacs.  But it does need some tweaking.
+
+** Defining A Few Things
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-indent-mode)
+(setq org-ellipsis " ▼ "
+      org-log-done 'time
+      org-journal-date-format "%B %d, %Y (%A) "
+      org-journal-file-format "%Y-%m-%d.org"
+      org-hide-emphasis-markers t)
+(setq org-src-preserve-indentation nil
+      org-src-tab-acts-natively t
+      org-edit-src-content-indentation 0)
+#+end_src
+
+** Enabling Org Bullets
+
+Org-bullets gives us attractive bullets rather than asterisks.
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Source Code Block Syntax Highlighting
+
+We want the same syntax highlighting in source blocks as in the native language files.
+
+#+begin_src emacs-lisp
+(setq org-src-fontify-natively t
+    org-src-tab-acts-natively t
+    org-confirm-babel-evaluate nil
+    org-edit-src-content-indentation 0)
+#+end_src
+
+* RUNTIME PERFORMANCE
+
+Dial the GC threshold back down so that garbage collection happens more frequently but in less time.
+
+#+begin_src emacs-lisp
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
+#+end_src
+
+* STARTUP WINDOW SIZE
+
+#+begin_src emacs-lisp
+(setq default-frame-alist '((height . 50)
+                            (width . 175)
+                            (left . 300)
+                            (top . 60)))
+#+end_src
+
