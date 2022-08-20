@@ -8,6 +8,8 @@ fi
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=${PATH}:/usr/local/mysql/bin/
+export PATH=/Users/praishnavi/.cargo/bin:$PATH
+export PATH=~/Library/Python/3.8/bin/:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/$(whoami)/.oh-my-zsh"
@@ -112,3 +114,8 @@ source $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# GraalVM
+export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-22.2.0/Contents/Home/bin/:$PATH
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-22.2.0/Contents/Home
+
