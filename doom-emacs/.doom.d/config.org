@@ -95,8 +95,8 @@ By default in Emacs, we don't have ability to select text, and then start typing
 * FONTS
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Fira Code" :size 18 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 16))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 17))
 
 ;; changes certain keywords to symbols, such as lamda!
 (setq global-prettify-symbols-mode t)

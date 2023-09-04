@@ -55,3 +55,4 @@
 (package! all-the-icons)
 (package! evil-tutor)
 (package! beacon)
+(package! catppuccin-theme)

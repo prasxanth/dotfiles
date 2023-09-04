@@ -23,8 +23,8 @@
 
 (delete-selection-mode t)
 
-(setq doom-font (font-spec :family "Fira Code" :size 18 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 16))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 19 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 17))
 
 ;; changes certain keywords to symbols, such as lamda!
 (setq global-prettify-symbols-mode t)
@@ -53,3 +53,7 @@
                             (width . 175)
                             (left . 300)
                             (top . 60)))
+
+
+;; catpuccin theme
+(setq doom-theme 'catppuccin)
